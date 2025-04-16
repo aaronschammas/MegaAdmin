@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Diario</title>
+    <link rel="stylesheet" href="css/stylesIndex.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gestión Diario</h1>
+            <p>Nombre del Local: <span id="local-nombre">{{ .local_nombre }}</span></p>
+        </header>
+        <main>
+            <input type="hidden" id="usuario-id" value="{{ .usuario_id }}"> <!-- ID del usuario -->
+            <input type="hidden" id="usuario-nombre" value="{{ .usuario_nombre }}"> <!-- Nombre del usuario -->
+            
+            <div class="header-bar">
+                <div class="field-group">
+                    <label for="sucursal">Sucursal:</label>
+                    <select id="sucursal">
+                        <option value="{{ .local_id }}">{{ .local_nombre }}</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" id="fecha" value="2024-12-27">
+                </div>
+                <div class="field-group">
+                    <label for="turno">Turno:</label>
+                    <select id="turno">
+                        <option value="M">Mañana</option>
+                        <option value="T">Tarde</option>
+                    </select>
+                </div>
+            </div>
+            <section class="calculator-section">
+                <h2>Calculadora de Billetes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Denominación</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10,000</td>
+                            <td><input type="number" data-denomination="10000" class="cantidad"></td>
+                        </tr>
+                        <tr>
+                            <td>2,000</td>
+                            <td><input type="number" data-denomination="2000" class="cantidad"></td>
+                        </tr>
+                        <tr>
+                            <td>1,000</td>
+                            <td><input type="number" data-denomination="1000" class="cantidad"></td>
+                        </tr>
+                        <tr>
+                            <td>500</td>
+                            <td><input type="number" data-denomination="500" class="cantidad"></td>
+                        </tr>
+                        <tr>
+                            <td>200</td>
+                            <td><input type="number" data-denomination="200" class="cantidad"></td>
+                        </tr>
+                        <tr>
+                            <td>100</td>
+                            <td><input type="number" data-denomination="100" class="cantidad"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section class="form-section">
+                <h2>Listado de Tarjetas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Forma de Pago</th>
+                            <th>Tarjeta/Financiera</th>
+                            <th>Cuotas</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tarjetas-list">
+                        <tr>
+                            <td>
+                                <!-- Select para el tipo de pago -->
+                                <select class="forma-pago">
+                                    <option value="">Seleccionar</option>
+                                    <option value="Débito">Débito</option>
+                                    <option value="Crédito">Crédito</option>
+                                </select>
+                            </td>
+                            <td>
+                                <!-- Select para las tarjetas -->
+                                <select class="tarjeta-financiera">
+                                    <option value="">Seleccionar</option>
+                                    {{ range .tarjetas }}
+                                        <option value="{{ .Nombre }}" data-tipo="{{ .Tipo }}">{{ .Nombre }}</option>
+                                    {{ end }}
+                                </select>
+                            </td>
+                            <td><input type="number" placeholder="Cuotas" class="cuotas"></td>
+                            <td><input type="number" placeholder="Monto" class="monto"></td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+                <button id="agregar-fila">Agregar fila</button>
+                <section class="form-section">
+                    <h2>Chicas Trabajando</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chicas-list">
+                            <tr>
+                                <td><input type="text" placeholder="Nombre" class="nombre-chica"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button id="agregar-chica">Agregar Chica</button>
+                </section>
+                
+                <div class="totales">
+                    <label>Efectivo:</label>
+                    <input type="number" id="efectivo">
+
+                    <label>Egresos:</label>
+                    <input type="number" id="egresos">
+
+                    <label>Total Efectivo Rendido:</label>
+                    <input type="number" id="efectivo-rendido" readonly>
+
+                    <label>Total Venta TD:</label>
+                    <input type="number" id="total-td" readonly>
+
+                    <label>Total Venta TC:</label>
+                    <input type="number" id="total-tc" readonly>
+
+                    <label>Total Venta FN:</label>
+                    <input type="number" id="total-fn" readonly>
+
+                    <label>Total General:</label>
+                    <input type="number" id="total-general" readonly>
+
+               <section>
+
+                <button id="limpiar">Limpiar</button>
+                <button id="guardar">Imprimir y Guardar</button>
+            </section>
+
+            <section class="form-section">
+                <h2>Egresos</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="egresos-list"> <!-- Cambiar el ID a 'egresos-list' -->
+                        <tr>
+                            <td><input type="text" placeholder="Concepto" class="concepto"></td>
+                            <td><input type="number" placeholder="Monto" class="monto"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="agregar-egreso">Agregar Egreso</button>
+            </section>
+        </section>
+        </table>
+        
+        </main>
+    </div>
+    <script src="js/script.js"></script>
+    
+</body>
+</html>

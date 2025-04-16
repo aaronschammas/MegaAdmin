@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Resúmenes Diarios</title>
+    <link rel="stylesheet" href="css/styleIndexAdmin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Cambiar la clase 'admin' en el body para activar/desactivar modo administrador -->
+    <div class="container admin">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>📋 Sistema Resúmenes</h2>
+                <span class="badge-admin">Admin</span>
+            </div>
+
+            <!-- Menú Usuario Regular -->
+            <div class="menu-section">
+                <a href="#cargar" class="menu-item">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Cargar Resumen
+                </a>
+                <a href="#historial" class="menu-item">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    Historial
+                </a>
+            </div>
+
+            <!-- Sección Administrador -->
+            <div class="menu-section">
+                <h4>Herramientas Admin</h4>
+                <a href="#analisis" class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    Análisis
+                </a>
+                <a href="#usuarios" class="menu-item">
+                    <i class="fas fa-user-gear"></i>
+                    Usuarios
+                </a>
+                <a href="#diagramas" class="menu-item">
+                    <i class="fas fa-chart-pie"></i>
+                    Diagramas
+                </a>
+            </div>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="content">
+            <div class="main-content">
+                <!-- Secciones de contenido (agregar según necesidades) -->
+                <section id="cargar">
+                    <h1>📤 Cargar Resumen Diario</h1>
+                    <!-- Formulario de carga aquí -->
+                </section>
+
+                <section id="historial" style="display: none;">
+                    <h1>🕒 Historial de Envíos</h1>
+                    <!-- Listado de envíos aquí -->
+                </section>
+
+                <section id="analisis" style="display: none;">
+                    <h1>📊 Análisis de Datos</h1>
+                    <!-- Herramientas de análisis aquí -->
+                </section>
+
+                <section id="usuarios" style="display: none;">
+                    <h1>👥 Gestión de Usuarios</h1>
+                    <!-- Gestión de usuarios aquí -->
+                </section>
+
+                <section id="diagramas" style="display: none;">
+                    <h1>📈 Generador de Diagramas</h1>
+                    <!-- Generador de diagramas aquí -->
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Script básico para mostrar secciones
+        document.querySelectorAll('.menu-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                
+                // Oculta todas las secciones
+                document.querySelectorAll('section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Muestra la sección objetivo
+                const targetSection = document.getElementById(targetId);
+                if(targetSection) {
+                    targetSection.style.display = 'block';
+                }
+            });
+        });
+        
+        // Mostrar sección por defecto al cargar
+        window.onload = () => {
+            document.getElementById('cargar').style.display = 'block';
+        };
+    </script>
+</body>
+</html>

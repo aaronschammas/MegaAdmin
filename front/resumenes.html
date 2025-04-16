@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Turnos</title>
+    <link rel="stylesheet" href="css/styleResumenes.css">
+</head>
+<body>
+    <h1>Resumen de Turnos</h1>
+
+    <!-- Formulario para filtrar los datos -->
+    <div class="filter-section">
+        <form id="filter-form">
+            <label for="fecha-desde">Fecha Desde:</label>
+            <input type="date" id="fecha-desde" name="fechaDesde" value="">
+            
+            <label for="fecha-hasta">Fecha Hasta:</label>
+            <input type="date" id="fecha-hasta" name="fechaHasta" value="">
+            
+            <label for="turno">Turno:</label>
+            <select id="turno" name="turno">
+                <option value="Mañana" selected>Mañana</option>
+                <option value="Tarde">Tarde</option>
+            </select>
+
+            <label for="id-local">Sucursal:</label>
+            <select id="id-local" name="idLocal">
+                <option value="0">Todas</option>
+                <!-- Puedes llenar estas opciones dinámicamente si es necesario -->
+            </select>
+
+            <button type="button" id="aplicar-filtros">Aplicar Filtros</button>
+        </form>
+    </div>
+
+    <!-- Totales del resumen -->
+    <div class="totales">
+        <p><strong>Total Efectivo:</strong> <span id="total-efectivo">0.00</span></p>
+        <p><strong>Total Crédito:</strong> <span id="total-credito">0.00</span></p>
+        <p><strong>Total Débito:</strong> <span id="total-debito">0.00</span></p>
+        <p><strong>Total Egresos:</strong> <span id="total-egresos">0.00</span></p>
+    </div>
+    
+    <!-- Tabla de datos del resumen -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre del Local</th>
+                <th>Total Ventas</th>
+                <th>Efectivo</th>
+                <th>Tarjeta Crédito</th>
+                <th>Tarjeta Débito</th>
+                <th>Total Egresos</th>
+                <th>Chicas</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-datos">
+            <!-- Aquí se insertan dinámicamente las filas de la tabla -->
+        </tbody>
+    </table>
+
+    <script>
+        // Función para cargar datos predeterminados
+        async function cargarDatosDefault() {
+            try {
+                const response = await fetch('/resumenes'); // Ruta predeterminada
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                actualizarVista(data);
+            } catch (error) {
+                console.error('Error al cargar los datos predeterminados:', error);
+                alert('Ocurrió un error al cargar los datos predeterminados.');
+            }
+        }
+
+        // Función para cargar datos filtrados
+        async function cargarDatosFiltrados() {
+            const formData = new FormData(document.getElementById('filter-form'));
+            const params = new URLSearchParams(formData).toString();
+
+            try {
+                const response = await fetch(`/resumenes/filtrar?${params}`); // Ruta para aplicar filtros
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                actualizarVista(data);
+            } catch (error) {
+                console.error('Error al cargar los datos filtrados:', error);
+                alert('Ocurrió un error al cargar los datos filtrados.');
+            }
+        }
+
+        // Función para actualizar la vista con los datos recibidos
+        function actualizarVista(data) {
+            // Actualizar los totales
+            document.getElementById('total-efectivo').textContent = data.total_efectivo.toFixed(2);
+            document.getElementById('total-credito').textContent = data.total_credito.toFixed(2);
+            document.getElementById('total-debito').textContent = data.total_debito.toFixed(2);
+            document.getElementById('total-egresos').textContent = data.total_egresos.toFixed(2);
+
+            // Limpiar la tabla
+            const tablaDatos = document.getElementById('tabla-datos');
+            tablaDatos.innerHTML = '';
+
+            // Agregar nuevas filas a la tabla
+            data.datos.forEach(dato => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${dato.ID}</td>
+                    <td>${dato.Nombre}</td>
+                    <td>${dato.TotalVentas.toFixed(2)}</td>
+                    <td>${dato.Efectivo.toFixed(2)}</td>
+                    <td>${dato.TarjetaCredito.toFixed(2)}</td>
+                    <td>${dato.TarjetaDebito.toFixed(2)}</td>
+                    <td>${dato.TotalEgresos.toFixed(2)}</td>
+                    <td>${dato.Chicas}</td>
+                `;
+                tablaDatos.appendChild(fila);
+            });
+        }
+
+        // Evento para el botón de aplicar filtros
+        document.getElementById('aplicar-filtros').addEventListener('click', cargarDatosFiltrados);
+
+        // Cargar datos predeterminados al iniciar
+        cargarDatosDefault();
+    </script>
+</body>
+</html>

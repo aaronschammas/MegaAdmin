@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar usuario</title>
+</head>
+<body>
+     <div>
+        <form action="/registro" method="POST">
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Usuario</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ingresa tu usuario" required>
+          </div>
+          <div class="mb-3">
+            <label for="contraseña" class="form-label">Password</label>
+            <input type="password" id="contraseña" name="contraseña" class="form-control" placeholder="Ingresa tu contraseña" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+          
+          <select name="id_rol" id="id_rol">
+            <option value="1">Admin</option>
+            <option value="2">Negocio</option>
+          </select>
+          
+        </form>
+     </div>
+</body>
+</html>

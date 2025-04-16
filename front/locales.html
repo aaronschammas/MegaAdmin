@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/localesCSS.css">
+    <title>Locales</title>
+</head>
+<body>
+    <h1>Seleccione un local</h1>
+    <select id="local-select">
+       <option>seleccione un local</option>
+        {{ range .locales }}
+            <option value="{{ .ID }}">{{ .Nombre }}</option>
+        {{ end }}
+    </select>
+    <button id="guardar-local" class="btn btn-primary">Guardar Selección</button>
+    <div id="local-data">
+        <h2>Datos del local</h2>
+        <p>ID: <span id="local-id"></span></p>
+        <p>Nombre: <span id="local-nombre"></span></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const select = document.getElementById("local-select");
+            const guardarBtn = document.getElementById("guardar-local");
+            select.addEventListener("change", function() {
+                const localID = select.value;
+                const localIDSpan = document.getElementById("local-id");
+                const localNombreSpan = document.getElementById("local-nombre");
+                localIDSpan.textContent = localID;
+                localNombreSpan.textContent = select.options[select.selectedIndex].text;
+            });
+
+            guardarBtn.addEventListener("click", async function() {
+                const localID = select.value;
+                if (!localID) {
+                    alert("Seleccione un local antes de continuar.");
+                    return;
+                }
+                const response = await fetch("/completar-cookie", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id_local: localID }),
+                });
+
+                if (response.ok) {
+                    window.location.href = "/"; // Redirigir a la página principal
+                } else {
+                    alert("Error al guardar el local seleccionado.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

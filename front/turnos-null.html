@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Turnos Pendientes</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <h1>Modificar Turnos Pendientes</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Local</th>
+                <th>Usuario</th>
+                <th>Turno</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .turnos }}
+            <tr>
+                <td>{{ .ID }}</td>
+                <td>{{ .Fecha.Format "2006-01-02" }}</td>
+                <td>{{ .IDLocal }}</td>
+                <td>{{ .IDUsuario }}</td>
+                <td>
+                    <select class="turno-select" data-id="{{ .ID }}">
+                        <option value="">Seleccionar</option>
+                        <option value="Mañana">Mañana</option>
+                        <option value="Tarde">Tarde</option>
+                    </select>
+                </td>
+            </tr>
+            {{ end }}
+        </tbody>
+    </table>
+
+    <button id="guardar-cambios">Guardar Cambios</button>
+
+    <script>
+        $(document).ready(function () {
+            let turnosModificados = [];
+
+            // Capturar cambios en los selects
+            $(".turno-select").change(function () {
+                let turnoId = $(this).data("id");
+                let nuevoTurno = $(this).val();
+
+                let index = turnosModificados.findIndex(t => t.id === turnoId);
+                if (index !== -1) {
+                    turnosModificados[index].turno = nuevoTurno;
+                } else {
+                    turnosModificados.push({ id: turnoId, turno: nuevoTurno });
+                }
+            });
+
+            // Guardar los turnos modificados
+            $("#guardar-cambios").click(function () {
+                if (turnosModificados.length === 0) {
+                    alert("No se han modificado turnos.");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/admin/actualizar-turnos",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(turnosModificados),
+                    success: function (response) {
+                        alert("Turnos actualizados correctamente.");
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert("Error al actualizar los turnos.");
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
