@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Usuarios</title>
+  <link rel="stylesheet" href="css/styleCreateUsers.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Gestión de Usuarios</h1>
+
+    <!-- Formulario para crear o editar usuarios -->
+    <form class="user-form" method="POST" action="/admin/create-user">
+      <label for="username">Nombre de Usuario</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" name="password" required>
+
+      <label for="role">Rol</label>
+      <select id="role" name="role" required>
+        <option value="user">Usuario</option>
+        <option value="admin">Administrador</option>
+      </select>
+
+      <label for="locales">Locales Asignados</label>
+      <select id="locales" name="locales[]" multiple>
+        <!-- Estos valores deben ser generados dinámicamente desde el backend -->
+        <option value="1">Local 1</option>
+        <option value="2">Local 2</option>
+        <option value="3">Local 3</option>
+      </select>
+
+      <button type="submit">Crear Usuario</button>
+    </form>
+
+    <!-- Tabla de usuarios existentes -->
+    <h2>Usuarios Existentes</h2>
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Rol</th>
+          <th>Locales</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Estas filas deben ser generadas dinámicamente desde el backend -->
+        <tr>
+          <td>juanperez</td>
+          <td>Usuario</td>
+          <td>Local 1, Local 3</td>
+          <td>
+            <button class="edit-btn">Editar</button>
+            <button class="delete-btn">Eliminar</button>
+          </td>
+        </tr>
+        <!-- Más filas según los usuarios existentes -->
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

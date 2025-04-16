@@ -1,7 +1,5 @@
 package handdlers
 
-
-
-type Crearusuarios struct{ 
+/*type Crearusuarios struct{
 	modelo
-}
+}*/
